@@ -87,6 +87,12 @@ python main.py
 - AI生成的代码和建议仍需人工审核，以确保其准确性和适用性。
 - 定期备份重要文件，特别是在使用编辑功能时。
 
+## 参考
+
+本项目参考了以下项目：
+
+- [o1-engineer](https://github.com/Code-WSY/o1-engineer)
+
 ## 许可证
 
 该项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE) 文件。
