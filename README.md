@@ -87,16 +87,6 @@ python main.py
 - AI生成的代码和建议仍需人工审核，以确保其准确性和适用性。
 - 定期备份重要文件，特别是在使用编辑功能时。
 
-## 贡献
-
-欢迎对Coder Composer项目做出贡献！如果你有改进建议或发现了bug，请：
-
-1. Fork 这个仓库
-2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启一个 Pull Request
-
 ## 许可证
 
 该项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE) 文件。
