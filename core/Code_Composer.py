@@ -143,7 +143,7 @@ class CodeComposer:
     def debug(self):
         if self.last_ai_response:
             print(colored("最后AI响应:", "blue"))
-            print(Markdown(self.last_ai_response))
+            print(self.last_ai_response)
         else:
             print(colored("没有AI响应可用。", "red"))
             logging.warning("用户在没有AI响应的情况下发出/debug命令。")
@@ -244,21 +244,22 @@ class CodeComposer:
         create_request = f"{self.CREATE_SYSTEM_PROMPT}\n\n用户请求: {creation_instruction}"
         ai_response = self.chat_with_ai(create_request)
         if ai_response:
-                while True:
-                    print(f"以下是 {self.MODEL} 建议的创建结构:")
-                    rprint(Markdown(ai_response))
+            while True:
+                print(f"以下是 {self.MODEL} 建议的创建结构:")
+                markdown_ai_response = ai_response.replace("%%%", "```")
+                rprint(Markdown(markdown_ai_response))
 
-                    confirm = prompt("您想执行这些创建步骤吗? (yes/no): ", style=self.style).strip().lower()
-                    if confirm == 'yes':
-                        success = apply_creation_steps(ai_response, self.added_files, chat_with_ai=self.chat_with_ai,root_dir=self.root_dir)
-                        if success:
-                            break
-                        else:
-                            retry = prompt("创建失败。您想让AI再次尝试吗? (yes/no): ", style=self.style).strip().lower()
-                            if retry != 'yes':
-                                break
-                            ai_response = self.chat_with_ai("之前的创建尝试失败。请尝试不同的方法。")
+                confirm = prompt("您想执行这些创建步骤吗? (yes/no): ", style=self.style).strip().lower()
+                if confirm == 'yes':
+                    success = apply_creation_steps(ai_response, self.added_files, chat_with_ai=self.chat_with_ai,root_dir=self.root_dir)
+                    if success:
+                        break
                     else:
+                        retry = prompt("创建失败。您想让AI再次尝试吗? (yes/no): ", style=self.style).strip().lower()
+                        if retry != 'yes':
+                            break
+                        ai_response = self.chat_with_ai("之前的创建尝试失败。请尝试不同的方法。")
+                else:
                         print(colored("创建步骤未执行。", "red"))
                         logging.info("用户选择不执行创建步骤。")
                         break

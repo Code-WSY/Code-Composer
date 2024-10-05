@@ -162,13 +162,49 @@ def apply_modifications(new_content, file_path):
         print(colored(f"在应用更改到 {file_path} 时发生错误: {e}", "red"))
         logging.error(f"在应用更改到 {file_path} 时发生错误: {e}")
         return False
+
+def extract_code_blocks(text):
+    """
+    提取文本中的顶层代码块内容，忽略嵌套的 Markdown 代码块。
+
+    参数:
+    - text (str): 包含多个代码块的文本内容。
+
+    返回:
+    - List[str]: 包含所有顶层代码块内容的列表。
+    """
+    code_blocks = []
+    stack = []
+    current_block = []
+    code_block_pattern = re.compile(r'^%%%(\w+)?\s*$')
     
+    lines = text.splitlines()
+    for line in lines:
+        match = code_block_pattern.match(line)
+        if match:
+            if not stack:
+                # 开始一个新的顶层代码块
+                stack.append(match.group(1) if match.group(1) else "")
+                current_block = []
+            else:
+                # 结束当前代码块
+                stack.pop()
+                if not stack:
+                    code_blocks.append('\n'.join(current_block))
+            continue
+        if stack:
+            current_block.append(line)
+    
+    return code_blocks
+    
+    return code_blocks
 def apply_creation_steps(creation_response, added_files, retry_count=0,chat_with_ai=None,root_dir=os.getcwd()):
     """从AI响应中提取代码块，并创建文件或文件夹"""
     max_retries = 3 # 最大重试次数
     try:
         # 提取内容中的所有代码块
-        code_blocks = re.findall(r'```(?:\w+)?\s*([\s\S]*?)```', creation_response)
+        code_blocks = extract_code_blocks(creation_response)
+        #code_blocks类型是list，list的每个元素是str
         # 如果没有代码块，则抛出错误
         if not code_blocks:
             raise ValueError("未在AI响应中找到代码块。")
