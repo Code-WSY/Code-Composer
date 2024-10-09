@@ -2,23 +2,24 @@
 
 Code Composer 是一个智能项目编码助手，旨在通过利用先进的大模型（如o1模型、Claude 3.5 Sonnet）来提升开发者的工作效率。它能够帮助开发者进行代码审查、项目规划、文件创建和编辑等任务，为软件开发过程提供智能化支持。这个工具特别适合那些希望提高编码效率、获得即时编程建议或需要协助进行项目管理的开发者。
 
-# 功能
+## 功能
+目前支持以下命令的调用：
 
-Code Composer 提供了多种功能来支持开发者的工作：
+```
+/planning 规划项目结构和任务 (后跟指令)
+/create   创建项目需要的文件或文件夹 (后跟指令)
+/edit     编辑项目文件或目录 (后跟路径)
+/reset    重置聊天上下文并清除添加的文件
+/review   审查代码文件 (后跟路径)
+/chat     与AI聊天 (后跟路径)
+/debug    打印最后AI响应
+/quit     退出程序
+```
 
-1. 项目规划：通过 `/planning` ，AI可以帮助规划项目结构和任务。
-2. 项目创建：通过 `/create` 命令，AI 可以根据需求自动创建项目文件，加速项目初始化过程。
-3. 项目编辑：通过 `/edit` 命令，AI 可以对项目选择的代码文件或目录进行智能修改和优化，提高代码质量和效率。
-4. 项目对话：使用 `/chat` 命令，可以基于选中的文件或目录与AI进行交流。
-5. 代码审查：使用 `/review` 命令可以启动自动化代码审查，AI 将识别潜在问题并提供改进建议。
-
-# 安装
-
-## 环境变量配置
-
-在项目根目录创建 `.env` 文件，并设置以下环境变量：
-
-```bash
+## 安装
+### 环境变量配置
+在项目根目录创建 .env 文件，并设置以下环境变量：
+```
 #你的OpenAI API密钥
 OPENAI_API_KEY=
 OPENAI_API_BASE_URL=
@@ -27,57 +28,50 @@ MODEL=
 #要排除的目录，多个目录用逗号分隔，如：.git,.idea,venv
 EXCLUDED_DIRS=
 ```
-
-## 安装依赖
-
-```bash
+### 安装依赖
+```
 pip install -r requirements.txt
 ```
-
-# 使用
-
-## 应用启动
-
-在配置好环境变量后，使用以下命令启动应用程序：
-
-```bash
+## 使用
+在配置好环境变量后，在项目根目录运行：
+```
 python main.py
 ```
-
 注意：
+启动时会跳出目录选择栏，这是选择根目录，后面所有的项目的创建、编辑都是在该目录下进行的。
+确保在启动应用前已正确配置所有必要的环境变量。
 
-1. 启动时会跳出目录选择栏，这是选择根目录，后面所有的项目的创建、编辑都是在该目录下进行的。
-2. 确保在启动应用前已正确配置所有必要的环境变量。
 
-## 使用示例
-
-### 创建一个网页贪吃蛇项目
-
-首先通过 `/planning` 让AI帮忙规划项目结构：
-
-```bash
-/planning 我想创建一个网页版的连连看游戏
+## 使用示例:写一个贪吃蛇项目
+1. 可以通过`/palnning`命令让AI帮忙规划项目结构
 ```
-
-输出：
-
-![img](https://sylearn.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fea7343fb-f1bd-449d-b9b7-642a920c157b%2F75a9067d-3fc4-4fb4-8352-cef27babd7c8%2Fimage.png?table=block&id=1169513a-d132-8016-aaa3-c52d579d6fa9&spaceId=ea7343fb-f1bd-449d-b9b7-642a920c157b&width=1420&userId=&cache=v2)
-
-接着，我们可以基于上面的规划，创建项目了
-
-```bash
-/create 基于上述内容创建连连看项目
+/planning 我想创建一个网页贪吃蛇项目
 ```
+AI会帮你详细规划该项目，效果如下：
 
-输出：
+![](https://files.mdnice.com/user/4432/33aab384-578a-4491-a94e-b42e7fab44d1.png)
 
-![image.png](https://sylearn.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fea7343fb-f1bd-449d-b9b7-642a920c157b%2Fb7f17fe8-51c7-47d9-aaed-2c9f537e817e%2Fimage.png?table=block&id=1169513a-d132-8038-b25a-d7600b9045a8&spaceId=ea7343fb-f1bd-449d-b9b7-642a920c157b&width=1420&userId=&cache=v2)
+2. 接着，我们就可以让AI基于上面的规划，创建项目了:
+```
+/create 基于上面的规划，请创建该项目
+```
+于是，AI会将所有需要创建的目录/文件列出，如果统一，键入yes即可创建：
 
-如果选择创建，则输入 `yes` ，连连看游戏则创建成功：
+![](https://files.mdnice.com/user/4432/0c874b75-03f0-4aa1-9c7c-239e07e81f2c.png)
 
-![image.png](https://sylearn.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fea7343fb-f1bd-449d-b9b7-642a920c157b%2F6d6300a3-0690-4acd-9a26-d8e91e0e4351%2Fimage.png?table=block&id=1169513a-d132-8008-8353-d933b19b9868&spaceId=ea7343fb-f1bd-449d-b9b7-642a920c157b&width=1420&userId=&cache=v2)
+键入后：
 
-如果有bug也可以通过 `/edit` 命令进行编辑。
+![](https://files.mdnice.com/user/4432/77fb867a-55a1-4e9d-971b-a3e6984e784f.png)
+
+我们来看看该目录，可以发现，文件已经全部被创建：
+
+![](https://files.mdnice.com/user/4432/72ce2832-203d-4f87-9a9b-d5077c4e067f.png)
+
+最后我们点击`index.html`就可以发现，生成代码可以正常运行：
+
+![](https://files.mdnice.com/user/4432/bbe4b93a-886a-44ee-a03b-57756d3386d0.png)
+
+当然，还有其他的功能，如代码文件的审查和修改等等，这里就不作过多演示，小伙伴们可以自己尝试。
 
 
 ## 注意事项
